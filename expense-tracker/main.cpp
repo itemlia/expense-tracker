@@ -45,14 +45,18 @@ void addExpense()
 {
 	expense newExpense;
 
+	cout << "\nenter expense name: ";
+	cin >> newExpense.name;
+	cin.ignore();
+
 	cout << "\nenter expense amount: ";
 	cin >> newExpense.amount;
 	cin.ignore();
 
-	cout << "enter expense description: ";
+	cout << "\nenter expense description: ";
 	getline(cin, newExpense.description);
 
-	cout << "enter expense date (dd mm yyyy): ";
+	cout << "\nenter expense date (dd mm yyyy): ";
 	cin >> newExpense.date.day >> newExpense.date.month >> newExpense.date.year;
 	cin.ignore();
 
@@ -74,10 +78,90 @@ void viewExpenses()
 	for (size_t i = 0; i < expenses.size(); ++i)
 	{
 		cout << "expense " << i + 1 << ": " << expenses[i].name << "\n";
-		cout << "amount: $" << expenses[i].amount << "\n";
+		cout << "amount: £" << expenses[i].amount << "\n";
 		cout << "description: " << expenses[i].description << "\n";
 		cout << "date: " << expenses[i].date.day << "/" << expenses[i].date.month << "/" << expenses[i].date.year << "\n\n";
 	}
+}
+
+void updateExpenseName(int expenseIndex)
+{
+	string input;
+
+	cout << "\ncurrent name: " << expenses[expenseIndex].name << "\n";
+	cout << "enter new name: ";
+	getline(cin, input);
+
+	if (!input.empty())
+	{
+		expenses[expenseIndex].name = input;
+	}
+	else
+	{
+		cout << "\nname cannot be empty. keeping current name.\n";
+	}
+
+	cout << "\nexpense name updated successfully!\n";
+}
+
+void updateExpenseAmount(int expenseIndex)
+{
+	string input;
+
+	cout << "\ncurrent amount: £" << expenses[expenseIndex].amount << "\n";
+	cout << "enter new amount: ";
+	getline(cin, input);
+
+	if (!input.empty())
+	{
+		expenses[expenseIndex].amount = stof(input);
+	}
+	else
+	{
+		cout << "\namount cannot be empty. keeping current amount.\n";
+	}
+
+	cout << "\nexpense amount updated successfully!\n";
+}
+
+void updateExpenseDescription(int expenseIndex)
+{
+	string input;
+
+	cout << "\ncurrent description: " << expenses[expenseIndex].description << "\n";
+	cout << "enter new description: ";
+	getline(cin, input);
+
+	if (!input.empty())
+	{
+		expenses[expenseIndex].description = input;
+	}
+	else
+	{
+		cout << "\ndescription cannot be empty. keeping current description.\n";
+	}
+
+	cout << "\nexpense description updated successfully!\n";
+}
+
+void updateExpenseDate(int expenseIndex)
+{
+	string input;
+
+	cout << "\ncurrent date: " << expenses[expenseIndex].date.day << "/" << expenses[expenseIndex].date.month << "/" << expenses[expenseIndex].date.year << "\n";
+	cout << "enter new date (dd mm yyyy): ";
+	getline(cin, input);
+
+	if (!input.empty())
+	{
+		sscanf_s(input.c_str(), "%d %d %d", &expenses[expenseIndex].date.day, &expenses[expenseIndex].date.month, &expenses[expenseIndex].date.year);
+	}
+	else
+	{
+		cout << "\ndate cannot be empty. keeping current date.\n";
+	}
+
+	cout << "\nexpense date updated successfully!\n";
 }
 
 void updateExpense()
@@ -140,86 +224,6 @@ void updateExpense()
 	default:
 		break;
 	}
-}
-
-void updateExpenseName(int expenseIndex)
-{
-	string input;
-
-	cout << "\ncurrent name: " << expenses[expenseIndex].name << "\n";
-	cout << "enter new name: ";
-	getline(cin, input);
-
-	if(!input.empty())
-	{
-		expenses[expenseIndex].name = input;
-	}
-	else
-	{
-		cout << "\nname cannot be empty. keeping current name.\n";
-	}
-
-	cout << "\nexpense name updated successfully!\n";
-}
-
-void updateExpenseAmount(int expenseIndex)
-{
-	string input;
-
-	cout << "\ncurrent amount: £" << expenses[expenseIndex].amount << "\n";
-	cout << "enter new amount: ";
-	getline(cin, input);
-
-	if(!input.empty())
-	{
-		expenses[expenseIndex].amount = stof(input);
-	}
-	else
-	{
-		cout << "\namount cannot be empty. keeping current amount.\n";
-	}
-
-	cout << "\nexpense amount updated successfully!\n";
-}
-
-void updateExpenseDescription(int expenseIndex)
-{
-	string input;
-
-	cout << "\ncurrent description: " << expenses[expenseIndex].description << "\n";
-	cout << "enter new description: ";
-	getline(cin, input);
-
-	if(!input.empty())
-	{
-		expenses[expenseIndex].description = input;
-	}
-	else
-	{
-		cout << "\ndescription cannot be empty. keeping current description.\n";
-	}
-
-	cout << "\nexpense description updated successfully!\n";
-}
-
-void updateExpenseDate(int expenseIndex)
-{
-	string input;
-
-	cout << "\ncurrent date: " << expenses[expenseIndex].date.day << "/" << expenses[expenseIndex].date.month << "/" << expenses[expenseIndex].date.year << "\n";
-	cout << "enter new date (dd mm yyyy): ";
-	getline(cin, input);
-
-	if(!input.empty())
-	{
-		sscanf(input.c_str(), "%d %d %d", &expenses[expenseIndex].date.day, &expenses[expenseIndex].date.month, &expenses[expenseIndex].date.year);
-	}
-	else
-	{
-		cout << "\ndate cannot be empty. keeping current date.\n";
-	}
-
-	cout << "\nexpense date updated successfully!\n";
 }
 
 void deleteExpense()
@@ -298,39 +302,44 @@ int main()
 {
 	int userChoice;
 
-	displayMenu();
-
-	cin >> userChoice;
-	cin.ignore();
-
-	switch (userChoice)
+	while (true)
 	{
-	case 1:
-		addExpense();
-		break;
-	case 2:
-		viewExpenses();
-		break;
-	case 3:
-		updateExpense();
-		break;
-	case 4:
-		deleteExpense();
-		break;
-	case 5:
-		viewTotalExpenseSummary();
-		break;
-	case 6:
-		viewExpenseSummaryForTimeframe();
-		break;
-	case 7:
-		system("clear");
-		return 0;
-		break;
-	default:
-		cout << "\ninvalid choice, please try again! ";
-		userChoice = 0;
-		break;
+		displayMenu();
+
+		cin >> userChoice;
+		cin.ignore();
+
+		switch (userChoice)
+		{
+		case 1:
+			addExpense();
+			break;
+		case 2:
+			viewExpenses();
+			break;
+		case 3:
+			updateExpense();
+			break;
+		case 4:
+			deleteExpense();
+			break;
+		case 5:
+			viewTotalExpenseSummary();
+			break;
+		case 6:
+			viewExpenseSummaryForTimeframe();
+			break;
+		case 7:
+			system("clear");
+			return 0;
+			break;
+		default:
+			cout << "\ninvalid choice, please try again! ";
+			userChoice = 0;
+			break;
+		}
 	}
+
+	return 0;
 
 }
